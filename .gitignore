@@ -1,0 +1,5 @@
+*.sw*
+IpFlow-Dashboard
+*.crt
+*.key
+manifests/base/params.env
