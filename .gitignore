@@ -1,5 +1,7 @@
-*.sw*
-IpFlow-Dashboard
-*.crt
-*.key
-manifests/base/params.env
+*~
+\#*
+*.prof
+tmp-build
+.DS_Store
+.idea
+.go-version
