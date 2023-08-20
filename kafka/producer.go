@@ -3,8 +3,8 @@
   *  An implementation of a thread-safe Kafka Producer based on the
   *  confluent-kafka-go library.
   *
-  * tcarland@gmail.com
-  * Aug 15, 2023
+  *  tcarland@gmail.com
+  *  Aug 15, 2023
  **/
 package kafka
 
@@ -14,6 +14,7 @@ import (
     "log"
 
     "github.com/tcarland/kafka-go/utils"
+
     "github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
@@ -46,6 +47,8 @@ func (p *Producer) InitProducer(brokers string, topic string) *Producer {
     p.active  = false
     return p
 }
+
+// -----------------------------------
 
 // Kafka Producer to be ran as a goroutine
 func (p *Producer) Produce(ctx context.Context) {
@@ -115,6 +118,7 @@ func (p *Producer) Produce(ctx context.Context) {
 	producer.Close()
 }
 
+// -----------------------------------
 
 func (p *Producer) SendMessage(msg string) {
     b := p.buffers.Get()
@@ -127,8 +131,9 @@ func (p *Producer) IsActive() bool {
     return p.active
 }
 
+// -----------------------------------
 
-func (p *Producer) CreateTopic ( numParts int, replFactor int ) {
+func (p *Producer) CreateTopic(numParts int, replFactor int) {
     admin, err := kafka.NewAdminClient(&kafka.ConfigMap{"bootstrap.servers": p.brokers})
 
     if err != nil {
@@ -155,3 +160,6 @@ func (p *Producer) CreateTopic ( numParts int, replFactor int ) {
 
     admin.Close()
 }
+
+// -----------------------------------
+// producer.go

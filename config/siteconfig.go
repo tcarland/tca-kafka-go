@@ -1,5 +1,5 @@
 /**  
-  * Parses application config parameters
+  *  Application config parameters
   *
  **/ 
 package config
