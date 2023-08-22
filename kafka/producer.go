@@ -111,7 +111,7 @@ func (p *Producer) Produce(ctx context.Context) {
 	}
 
     for producer.Flush(10000) > 0 {
-        log.Println("Producer Flush() for outstanding messages")
+        log.Println("Producer Flush() ...")
     }
 
     log.Printf("Producer finished for '%s'", p.topic)
