@@ -13,6 +13,7 @@ import (
     "context"
     "log"
 
+    "github.com/tcarland/kafka-go/config"
     "github.com/tcarland/kafka-go/utils"
 
     "github.com/confluentinc/confluent-kafka-go/v2/kafka"
@@ -111,7 +112,7 @@ func (p *Producer) Produce(ctx context.Context) {
 	}
 
     for producer.Flush(10000) > 0 {
-        log.Println("Producer Flush() for outstanding messages")
+        log.Println("Producer Flush() ...")
     }
 
     log.Printf("Producer finished for '%s'", p.topic)
@@ -161,5 +162,8 @@ func (p *Producer) CreateTopic(numParts int, replFactor int) {
     admin.Close()
 }
 
+func (p *Producer) Version() string{
+    return config.Version
+}
 // -----------------------------------
 // producer.go

@@ -67,8 +67,8 @@ func (c *Consumer) Consume(ctx context.Context) {
     // .SubscribeTopics([]string{"myTopic", "^aRegex.*[Tt]opic"}, nil)
 
     log.Printf("kafka.Consumer.Consume() run '%s'", c.name)
-    c.site.Active= true
-    c.active = true
+    c.site.Active = true
+    c.active      = true
 
 	for c.active {
         select {
@@ -147,4 +147,9 @@ func (c *Consumer) GetMsgList() *utils.SyncList {
 
 func (c* Consumer) GetSiteConfig() *config.KafkaSite {
     return c.site
+}
+
+
+func (c *Consumer) Version() string{
+    return config.Version
 }
