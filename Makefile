@@ -2,7 +2,7 @@
 #
 RM=rm -rf
 
-all: kafka-go
+all: kafka-go test
 
 kafka-go:
 	( cd kafka && go build )
