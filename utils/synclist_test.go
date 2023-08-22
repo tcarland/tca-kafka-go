@@ -6,29 +6,29 @@ import (
 
 
 func TestList_PushBack(t *testing.T) {
-	t.Parallel()
-	testCases := []struct {
-		name      string
-		msg       string
-		msgcnt    int
-	}{
-		{"Add 1st message", "this is a test message", 1},
-		{"Add 2nd message", "this is another test", 2},
-	}
+    t.Parallel()
+    testCases := []struct {
+        name      string
+        msg       string
+        msgcnt    int
+    }{
+        {"Add 1st message", "this is a test message", 1},
+        {"Add 2nd message", "this is another test", 2},
+    }
 
-	l := SyncList{}
+    l := SyncList{}
     l.InitSyncList()
 
     l.Lock()
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			l.PushBack(tc.msg)
-			sz := l.Size()
-			if sz != tc.msgcnt {
-				t.Errorf("Expecting %v items but got: %v", tc.msgcnt, sz)
-			}
-		})
-	}
+    for _, tc := range testCases {
+        t.Run(tc.name, func(t *testing.T) {
+            l.PushBack(tc.msg)
+            sz := l.Size()
+            if sz != tc.msgcnt {
+                t.Errorf("Expecting %v items but got: %v", tc.msgcnt, sz)
+            }
+        })
+    }
     l.Unlock()
 }
 
@@ -63,31 +63,31 @@ func TestList_PopBack(t *testing.T) {
 }
 
 func TestList_PopFront(t *testing.T) {
-	t.Parallel()
+    t.Parallel()
 
-	testCases := []struct {
-		name     string
-		excnt    int
-	}{
-		{name: "Pop 1st message", excnt: 2},
-		{name: "Pop 2nd message", excnt: 1},
-	}
+    testCases := []struct {
+        name     string
+        excnt    int
+    }{
+        {name: "Pop 1st message", excnt: 2},
+        {name: "Pop 2nd message", excnt: 1},
+    }
 
-	l := SyncList{}
+    l := SyncList{}
     l.InitSyncList()
     l.PushBack("First Message")
     l.PushBack("Second Message")
     l.PushBack("Third Message")
 
     l.Lock()
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			l.PopFront()
-			if l.Size() != tc.excnt {
-				t.Errorf("Invalid number of items in the list: %v", l.Size())
-			}
-		})
-	}
+    for _, tc := range testCases {
+        t.Run(tc.name, func(t *testing.T) {
+            l.PopFront()
+            if l.Size() != tc.excnt {
+                t.Errorf("Invalid number of items in the list: %v", l.Size())
+            }
+        })
+    }
     l.Unlock()
 }
 
