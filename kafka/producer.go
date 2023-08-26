@@ -149,7 +149,7 @@ func (p *Producer) CreateTopic(numParts int, replFactor int) {
         []kafka.TopicSpecification{ {
             Topic:             p.topic,
             NumPartitions:     numParts,
-            ReplicationFactor: replFactor
+            ReplicationFactor: replFactor,
         } })
         
     if err != nil {
