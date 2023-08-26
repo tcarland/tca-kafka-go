@@ -1,4 +1,4 @@
-module github.com/tcarland/kafka-go
+module github.com/tcarland/tca-kafka-go
 
 go 1.19
 

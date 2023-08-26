@@ -2,9 +2,9 @@
 #
 RM=rm -rf
 
-all: kafka-go test
+all: tca-kafka-go test
 
-kafka-go:
+tca-kafka-go:
 	( cd kafka && go build )
 	( cd utils && go build )
 

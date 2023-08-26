@@ -14,8 +14,8 @@ import (
     "log"
     "time"
 
-    "github.com/tcarland/kafka-go/config"
-    "github.com/tcarland/kafka-go/utils"
+    "github.com/tcarland/tca-kafka-go/config"
+    "github.com/tcarland/tca-kafka-go/utils"
 
     "github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
