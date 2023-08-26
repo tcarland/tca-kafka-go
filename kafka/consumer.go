@@ -52,25 +52,25 @@ func (c *Consumer) InitConsumer ( name string, site *config.KafkaSite ) *Consume
 
 // Kafka Consumer goroutine
 func (c *Consumer) Consume(ctx context.Context) {
-	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers":     c.site.Brokers,
+    consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
+        "bootstrap.servers":     c.site.Brokers,
         "broker.address.family": "v4",
-		"group.id":              c.site.GroupId,
-		"auto.offset.reset":    "latest",
-	})
+        "group.id":              c.site.GroupId,
+        "auto.offset.reset":    "latest",
+    })
 
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+    if err != nil {
+        log.Fatal(err.Error())
+    }
 
-	consumer.SubscribeTopics([]string{c.site.Topic}, nil)  
-    // .SubscribeTopics([]string{"myTopic", "^aRegex.*[Tt]opic"}, nil)
+    consumer.SubscribeTopics([]string{c.site.Topic}, nil)  
+          //.SubscribeTopics([]string{"myTopic", "^aRegex.*[Tt]opic"}, nil)
 
     log.Printf("kafka.Consumer.Consume() run '%s'", c.name)
     c.site.Active = true
     c.active      = true
 
-	for c.active {
+    for c.active {
         select {
         case <- ctx.Done():
             log.Println("Consumer.Consume() Context done")
@@ -80,25 +80,25 @@ func (c *Consumer) Consume(ctx context.Context) {
         default:
             b := c.buffers.Get()
 
-		    msg, err := consumer.ReadMessage(time.Second * 6)
-		
+            msg, err := consumer.ReadMessage(time.Second * 6)
+        
             if err == nil {
                 b.Write(msg.Value)
                 c.bpc <- b
-		    } else if err.(kafka.Error).Code() != kafka.ErrTimedOut { 
-			    log.Printf("Consumer error: %v (%v)\n", err, msg)
-		    } else {
+            } else if err.(kafka.Error).Code() != kafka.ErrTimedOut { 
+                log.Printf("Consumer error: %v (%v)\n", err, msg)
+            } else {
                 if c.site.DoReset {
                     c.reset++
                 }
                 c.buffers.Put(b)
             }
         }
-	}
+    }
     c.site.Active = false
 
     log.Printf("Consumer.Consume() finished for '%s'", c.name)
-	consumer.Close()
+    consumer.Close()
 }
 
 

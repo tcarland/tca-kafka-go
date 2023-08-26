@@ -53,35 +53,35 @@ func (p *Producer) InitProducer(brokers string, topic string) *Producer {
 
 // Kafka Producer to be ran as a goroutine
 func (p *Producer) Produce(ctx context.Context) {
-	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": p.brokers})
+    producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": p.brokers})
 
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+    if err != nil {
+        log.Fatal(err.Error())
+    }
 
-	go func() {
-		for e := range producer.Events() {
-			switch ev := e.(type) {
-			case *kafka.Message:
-				m := ev
-				if m.TopicPartition.Error != nil {
-					log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
-				} else {
-					log.Printf("Delivered message to topic %s [%d] at offset %v\n",
-						*m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
-				}
-			case kafka.Error:
-				log.Printf("Error: %v\n", ev)
-			default:
-				log.Printf("Ignored event: %s\n", ev)
-			}
-		}
-	}()
+    go func() {
+        for e := range producer.Events() {
+            switch ev := e.(type) {
+            case *kafka.Message:
+                m := ev
+                if m.TopicPartition.Error != nil {
+                    log.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
+                } else {
+                    log.Printf("Delivered message to topic %s [%d] at offset %v\n",
+                        *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
+                }
+            case kafka.Error:
+                log.Printf("Error: %v\n", ev)
+            default:
+                log.Printf("Ignored event: %s\n", ev)
+            }
+        }
+    }()
 
     log.Printf("kafka.Producer.Produce() run '%s'", p.topic)
     p.active = true
 
-	for p.active {
+    for p.active {
         select {
         case <- ctx.Done():
             p.active = false
@@ -93,30 +93,30 @@ func (p *Producer) Produce(ctx context.Context) {
 
             b := <-p.bpc
 
-		    err := producer.Produce(&kafka.Message {
+            err := producer.Produce(&kafka.Message {
                 TopicPartition:   kafka.TopicPartition{Topic: &p.topic, Partition: kafka.PartitionAny},
                 Value:            b.Bytes(),
                 Headers:        []kafka.Header{{Key: "ipflow-dashboard", Value: []byte(p.topic)}}, 
             }, nil)
-		
+        
             if err == nil {
                 log.Printf("Produce() event: '%s' ", b.String())
             } else if err.(kafka.Error).Code() == kafka.ErrQueueFull {
                 log.Println("Producer queue full")            
-		    } else if err.(kafka.Error).Code() != kafka.ErrTimedOut { 
-			    log.Printf("Producer error: %v", err)
-		    }
+            } else if err.(kafka.Error).Code() != kafka.ErrTimedOut { 
+                log.Printf("Producer error: %v", err)
+            }
 
             p.buffers.Put(b)
         }
-	}
+    }
 
     for producer.Flush(10000) > 0 {
         log.Println("Producer Flush() ...")
     }
 
     log.Printf("Producer finished for '%s'", p.topic)
-	producer.Close()
+    producer.Close()
 }
 
 // -----------------------------------
@@ -145,12 +145,13 @@ func (p *Producer) CreateTopic(numParts int, replFactor int) {
     defer cancel()
 
     results, err := admin.CreateTopics(
-		ctx,
-		[]kafka.TopicSpecification{{
-			Topic:             p.topic,
-			NumPartitions:     numParts,
-			ReplicationFactor: replFactor}})
-		
+        ctx,
+        []kafka.TopicSpecification{ {
+            Topic:             p.topic,
+            NumPartitions:     numParts,
+            ReplicationFactor: replFactor,
+        } })
+        
     if err != nil {
         log.Fatal(err.Error())
     }
@@ -165,5 +166,3 @@ func (p *Producer) CreateTopic(numParts int, replFactor int) {
 func (p *Producer) Version() string{
     return config.Version
 }
-// -----------------------------------
-// producer.go
