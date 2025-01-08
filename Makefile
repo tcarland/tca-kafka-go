@@ -2,7 +2,10 @@
 #
 RM=rm -rf
 
-all: tca-kafka-go test
+all: gomod tca-kafka-go test
+
+gomod:
+	( go mod tidy )
 
 tca-kafka-go:
 	( cd kafka && go build )
