@@ -86,6 +86,7 @@ func (p *Producer) Produce(ctx context.Context) {
 
     log.Printf("kafka.Producer.Produce() run '%s'", p.site.Topic)
     p.active = true
+    p.site.Active = true
 
     for p.active {
         select {
@@ -120,6 +121,7 @@ func (p *Producer) Produce(ctx context.Context) {
     for producer.Flush(10000) > 0 {
         log.Println("Producer Flush() ...")
     }
+    p.site.Active = false
 
     log.Printf("Producer finished for '%s'", p.site.Topic)
     producer.Close()
