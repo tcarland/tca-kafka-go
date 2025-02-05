@@ -1,6 +1,6 @@
 ARG GO_VERSION=1.22
 
-FROM golang:${GO_VERSION} as build
+FROM golang:${GO_VERSION} AS build
 LABEL author="Timothy C. Arland <tcarland at gmail dot com>"
 
 WORKDIR /tca-kafka-go
