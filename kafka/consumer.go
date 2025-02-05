@@ -140,7 +140,12 @@ func (c *Consumer) IsActive() bool {
 }
 
 
-func (c *Consumer) GetMsgList() *utils.SyncList {
+func (c *Consumer) GetSyncList() *utils.SyncList {
+    return c.msglist
+}
+
+
+func (c *Consumer) GetMessageList() *utils.SyncList {
     return c.msglist
 }
 

@@ -13,13 +13,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
 
     steps:
     - uses: actions/checkout@v4
-
     - name: Build Container
       run: docker build -t ${{ env.IMAGE_NAME }} -f Containerfile .
