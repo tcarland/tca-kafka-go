@@ -26,8 +26,8 @@ import (
   * The Produce() method should be run as a goroutine.
  **/
 type Producer struct {
-    name      string
-    site     *config.KafkaSite
+    topic     string
+    brokers   string
     buffers  *utils.BufferPool
     bpc       chan *bytes.Buffer
     active    bool
@@ -35,31 +35,25 @@ type Producer struct {
 
 // -----------------------------------
 
-func NewProducer( name string, site *config.KafkaSite ) *Producer {
-    return new(Producer).InitProducer(name, site)
+func NewProducer(brokers string, topic string) *Producer {
+    return new(Producer).InitProducer(brokers, topic)
 }
 
-func (p *Producer) InitProducer( name string, site *config.KafkaSite ) *Producer {
-    p.name    = name
-    p.site    = site
+
+func (p *Producer) InitProducer(brokers string, topic string) *Producer {
+    p.topic   = topic
+    p.brokers = brokers
     p.buffers = utils.NewBufferPool(100)
     p.bpc     = make(chan *bytes.Buffer)
     p.active  = false
     return p
 }
 
-
 // -----------------------------------
-
-
-func (p *Producer) Version() string{
-    return config.Version
-}
-
 
 // Kafka Producer to be ran as a goroutine
 func (p *Producer) Produce(ctx context.Context) {
-    producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": p.site.Brokers})
+    producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": p.brokers})
 
     if err != nil {
         log.Fatal(err.Error())
@@ -84,9 +78,8 @@ func (p *Producer) Produce(ctx context.Context) {
         }
     }()
 
-    log.Printf("kafka.Producer.Produce() run '%s'", p.site.Topic)
+    log.Printf("kafka.Producer.Produce() run '%s'", p.topic)
     p.active = true
-    p.site.Active = true
 
     for p.active {
         select {
@@ -101,9 +94,9 @@ func (p *Producer) Produce(ctx context.Context) {
             b := <-p.bpc
 
             err := producer.Produce(&kafka.Message {
-                TopicPartition:   kafka.TopicPartition{Topic: &p.site.Topic, Partition: kafka.PartitionAny},
+                TopicPartition:   kafka.TopicPartition{Topic: &p.topic, Partition: kafka.PartitionAny},
                 Value:            b.Bytes(),
-                Headers:        []kafka.Header{{Key: "ipflow-dashboard", Value: []byte(p.site.Topic)}}, 
+                Headers:        []kafka.Header{{Key: "ipflow-dashboard", Value: []byte(p.topic)}}, 
             }, nil)
         
             if err == nil {
@@ -121,9 +114,8 @@ func (p *Producer) Produce(ctx context.Context) {
     for producer.Flush(10000) > 0 {
         log.Println("Producer Flush() ...")
     }
-    p.site.Active = false
 
-    log.Printf("Producer finished for '%s'", p.site.Topic)
+    log.Printf("Producer finished for '%s'", p.topic)
     producer.Close()
 }
 
@@ -142,8 +134,8 @@ func (p *Producer) IsActive() bool {
 
 // -----------------------------------
 
-func (p *Producer) CreateTopic() {
-    admin, err := kafka.NewAdminClient(&kafka.ConfigMap{"bootstrap.servers": p.site.Brokers})
+func (p *Producer) CreateTopic(numParts int, replFactor int) {
+    admin, err := kafka.NewAdminClient(&kafka.ConfigMap{"bootstrap.servers": p.brokers})
 
     if err != nil {
         log.Fatal(err.Error())
@@ -155,9 +147,9 @@ func (p *Producer) CreateTopic() {
     results, err := admin.CreateTopics(
         ctx,
         []kafka.TopicSpecification{ {
-            Topic:             p.site.Topic,
-            NumPartitions:     p.site.Partitions,
-            ReplicationFactor: p.site.Replicas,
+            Topic:             p.topic,
+            NumPartitions:     numParts,
+            ReplicationFactor: replFactor,
         } })
         
     if err != nil {
@@ -169,4 +161,8 @@ func (p *Producer) CreateTopic() {
     }
 
     admin.Close()
+}
+
+func (p *Producer) Version() string{
+    return config.Version
 }
