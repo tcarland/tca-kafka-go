@@ -57,6 +57,7 @@ func (p *Producer) Produce(ctx context.Context) {
 
     if err != nil {
         log.Fatal(err.Error())
+        return
     }
 
     go func() {
@@ -71,9 +72,9 @@ func (p *Producer) Produce(ctx context.Context) {
                         *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
                 }
             case kafka.Error:
-                log.Printf("Error: %v\n", ev)
+                log.Printf("Producer Events Error: %v\n", ev)
             default:
-                log.Printf("Ignored event: %s\n", ev)
+                log.Printf("Producer Ignored event: %s\n", ev)
             }
         }
     }()
