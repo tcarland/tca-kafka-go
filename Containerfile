@@ -1,4 +1,4 @@
-ARG GO_VERSION=1.22
+ARG GO_VERSION=1.23
 FROM golang:${GO_VERSION} AS build
 
 LABEL author="Timothy C. Arland <tcarland at gmail dot com>"

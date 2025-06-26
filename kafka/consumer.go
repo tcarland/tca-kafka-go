@@ -74,8 +74,10 @@ func (c *Consumer) Consume(ctx context.Context) {
         select {
         case <- ctx.Done():
             log.Println("Consumer.Consume() Context done")
-            c.active = false
-            close(c.bpc)
+            if c.active {
+            	close(c.bpc)
+                c.active = false
+            }
             continue
         default:
             b := c.buffers.Get()
