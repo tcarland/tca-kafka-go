@@ -1,6 +1,5 @@
 # Makefile for wrapping golang builds
 #
-RM=rm -rf
 
 all: gomod tca-kafka-go test
 
