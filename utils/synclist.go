@@ -1,6 +1,6 @@
 /** Synchronized list structure for storing a kafka message list
   *
-  * Author: Timothy C. Arland <tcarland at gmail dot com>
+  * Copyright (c) 2023-2026 Timothy C. Arland <tcarland at gmail dot com>
  **/
 package utils
 

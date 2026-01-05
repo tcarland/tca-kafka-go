@@ -1,6 +1,6 @@
 /** A BufferPool channel of byte buffers for use between goroutines 
   *
-  * Author: Timothy C. Arland <tcarland at gmail dot com>
+  * Copyright (c) 2023-2026 Timothy C. Arland <tcarland at gmail dot com>
  **/
 package utils
 

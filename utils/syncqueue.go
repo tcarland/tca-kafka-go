@@ -1,6 +1,6 @@
 /** Synchronized Queue structure for sharing messages across threads.
   * 
-  * Author: Timothy C. Arland <tcarland at gmail dot com>
+  * Copyright (c) 2023-2026 Timothy C. Arland <tcarland at gmail dot com>
  **/
 package utils
 
