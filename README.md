@@ -1,5 +1,6 @@
 tca-kafka-go
-=============
+============
+Copyright (c) 2023-2026 Timothy C. Arland <tcarland at gmail dot com>
 
 A library wrapper to the *confluentinc-kafka-go* package that provides added
 thread-safe constructs for use with *goroutines*.
@@ -32,7 +33,7 @@ kafka:
 A *Config* object or struct would consist of various objects representing 
 other parts of the application config as well as `map[string]*KafkaSite` 
 for this library.
-```golang
+```go
 package config
 
 import "github.com/tcarland/tca-kafka-go/config"
@@ -44,7 +45,7 @@ type Config struct {
 ```
 
 The config object can be generated manually via the *config.InitKafkaSite()* function
-```golang
+```go
 func (k *KafkaSite) InitKafkaSite(brokers string, topic string, gid string) *KafkaSite {}
 ```
 

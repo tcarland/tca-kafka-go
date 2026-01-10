@@ -3,8 +3,10 @@
   *  An implementation of a thread-safe Kafka Consumer based on the
   *  confluent-kafka-go library.
   *
-  *  tcarland@gmail.com
-  *  Aug 15, 2023
+  *  Author: tcarland@gmail.com
+  *  Created: Aug 15, 2023
+  * 
+  *  Copyright (c) 2023-2026 Timothy C. Arland <tcarland at gmail dot com>
  **/
 package kafka
 
