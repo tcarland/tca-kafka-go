@@ -6,7 +6,7 @@ package config
 
 import ()
 
-var Version string = "0.6.0"
+var Version string = "0.6.1"
 
 type KafkaSite struct {
     Brokers      string `yaml:"brokers"`
