@@ -1,2 +1,2 @@
-github.com/confluentinc/confluent-kafka-go/v2 v2.15.1 h1:zqKvZk3Ay68ya4hnImXecb55T579qI1x7ozaHcCL+AY=
-github.com/confluentinc/confluent-kafka-go/v2 v2.15.1/go.mod h1:Jb4/23G4BMIa8vrwtoKx5bdk2h0eUYHbXC45m1FuOXI=
+github.com/confluentinc/confluent-kafka-go/v2 v2.16.1 h1:/ijZ+cEblgBZFkqNbcZL28MPb7QftY/c6EpRjda9vOQ=
+github.com/confluentinc/confluent-kafka-go/v2 v2.16.1/go.mod h1:+UyluWSsEYBJE8L5ocILZIxL5sd6h+4DdEvi1qkFYO4=

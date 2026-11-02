@@ -1,5 +1,5 @@
 module github.com/tcarland/tca-kafka-go
 
-go 1.26.0
+go 1.27.3
 
-require github.com/confluentinc/confluent-kafka-go/v2 v2.15.1
+require github.com/confluentinc/confluent-kafka-go/v2 v2.16.1
